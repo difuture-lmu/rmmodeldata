@@ -1,0 +1,26 @@
+Package: rmmodeldata
+Type: Package
+Title: Remove data from models
+Authors@R:
+    c(person(given = "Daniel",
+             family = "Schalk",
+             role = c("aut", "cre"),
+             email = "daniel.schalk@stat.uni-muenchen.de"))
+Version: 0.0.1
+License: LGPL-3
+Description: Most statistical/machine learning models stores the data within the model object.
+    This package overloads model functions for being able to conduct  non-disclosive analysis
+    and also being able to share models without unintentionally sharing sensitive data.
+Depends:
+    R (>= 3.1.0)
+Imports:
+    checkmate,
+    partykit (>= 1.2-1)
+Suggests:
+    rmarkdown,
+    knitr,
+    testthat,
+    mvtnorm
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

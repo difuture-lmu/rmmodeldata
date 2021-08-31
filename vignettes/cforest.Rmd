@@ -1,0 +1,91 @@
+---
+title: "Train cforest without storing data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Train cforest without storing data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(rmmodeldata)
+```
+
+## Simulate Data
+
+```{r}
+simData = function(n = 500, p = 10, beta = 3, sd = 1) {
+
+  ## treatment
+  lev = LETTERS[1:4]
+  a = factor(sample(lev, n, TRUE), labels = lev, levels = lev)
+
+  ## correlated z variables
+  sigma = diag(p)
+  sigma[sigma == 0] = 0.2
+  ztemp = mvtnorm::rmvnorm(n, sigma = sigma)
+  z = (pnorm(ztemp) * 2 * pi) - pi
+  colnames(z) = paste0("z", 1:ncol(z))
+  z1 = z[,1]
+
+  ## outcome
+  y = 7 + 0.2 * (a %in% "A") + beta * cos(z1) * (a %in% "A") + rnorm(n, 0, sd)
+
+  data.frame(y = y, a = a, z)
+}
+
+beta     = 3
+p        = 5
+ntrain   = 500
+ntest    = 20
+
+set.seed(31415)
+simdata = simData(p, beta, ntrain)
+
+set.seed(31415)
+tsimdata = simData(p, beta, ntest)
+```
+
+## Compare cforest with and without data
+
+Train the random forests. The first forest `mod_with_data` is the object returned by the original `cforest` function from `partykit`. The second forest object `mod_without_data` is the one returned without data from `rmmodeldata`.
+
+```{r}
+set.seed(31415)
+mod_with_data = partykit::cforest(y ~ ., data = simdata)
+
+set.seed(31415)
+mod_without_data = cforest(y ~ ., data = simdata)
+```
+
+Now we want to compare the predictions returned from the objects. Note that due to namespace clashes when using `partykit` functionality via the namespace, we also export every predict function as non generic method with a prefix `predict_`. Hence, the save way to call the correct predict method is to use `predict_cforest`:
+
+```{r}
+pred_with_data = partykit::predict.cforest(mod_with_data, newdata = tsimdata)
+
+pred_without_data = predict_cforest(mod_without_data, newdata = tsimdata)
+# same as:
+pred_without_data = rmmodeldata:::predict.cforest(mod_without_data, newdata = tsimdata)
+
+all.equal(pred_with_data, pred_without_data)
+```
+
+Note: The generic `predict.cforest` is also exported but can be overloaded by partykit.
+
+
+## Check if a value from the data set can be found in the model structure
+
+```{r}
+lfound_with_data = searchObjectForValue(mod_with_data, simdata[1, 1])
+cat(lfound_with_data$found, sep = "\n")
+
+lfound_without_data = searchObjectForValue(mod_without_data, simdata[1, 1])
+cat(lfound_without_data$found, sep = "\n")
+```
