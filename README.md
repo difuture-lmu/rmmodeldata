@@ -1,14 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-    ## [2021-09-08 14:08:12] Package partykit was not loaded yet!
-
-    ## [                   ] Please do not load it after calling `library(rmmodeldata)` or
-
-    ## [                   ] call functions by using the namespace `rmmodeldata::function`
-
-    ## [                   ] (e.g. `rmmodeldata::cforest`) instead!
-
 # rmmodeldata: Remove data from models
 
 ## Overview
@@ -86,10 +78,13 @@ cat(vfound$found, sep = "\n")
 
 ## Disclaimer
 
-It is suggested to use the namespace `rmmodeldata` for calling functions
-to ensure the usage of the correct method. A message is printed when a
-method of `rmmodeldata` is used. Otherwise, it cannot be distinguished
-between the original and the new method.
+  - It is suggested to use the namespace `rmmodeldata` for calling
+    functions to ensure the usage of the correct method. A message is
+    printed when a method of `rmmodeldata` is used. Otherwise, it cannot
+    be distinguished between the original and the new method.
+
+  - Searching through objects ignores functions and environments. Thus,
+    if data are stored within an environment it is not detected.
 
 ## Installation
 
@@ -110,9 +105,9 @@ dat_test  = iris[! idx_train, ]
 
 set.seed(31415)
 mod_without_data = rmmodeldata::cforest(Petal.Length ~ ., data = dat_train)
-#> [2021-09-08 14:08:15] Using `rmmodeldata::cforest``
+#> [2021-09-08 14:13:30] Using `rmmodeldata::cforest``
 pred_without_data = predict(mod_without_data, newdata = dat_test)
-#> [2021-09-08 14:08:18] Using `rmmodeldata::predict.cforest.nodat`
+#> [2021-09-08 14:13:32] Using `rmmodeldata::predict.cforest.nodat`
 
 str(pred_without_data)
 #>  Named num [1:36] 1.49 1.46 1.42 1.96 1.52 ...

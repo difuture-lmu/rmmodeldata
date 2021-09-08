@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -49,8 +49,9 @@ cat(vfound$found, sep = "\n")
 
 ## Disclaimer
 
-It is suggested to use the namespace `rmmodeldata` for calling functions to ensure the usage of the correct method. A message is printed when a method of `rmmodeldata` is used. Otherwise, it cannot be distinguished between the original and the new method.
+- It is suggested to use the namespace `rmmodeldata` for calling functions to ensure the usage of the correct method. A message is printed when a method of `rmmodeldata` is used. Otherwise, it cannot be distinguished between the original and the new method.
 
+- Searching through objects ignores functions and environments. Thus, if data are stored within an environment it is not detected.
 
 ## Installation
 
