@@ -43,6 +43,8 @@ cat(vfound$found, sep = "\n")
 
 ```{r}
 mod = lm(Sepal.Length ~ ., data = iris)
+mod$test_slot = iris[100, 2]
+attr(mod$test_slot, "test-attr") = iris[100, 2]
 vfound = searchObjectForValue(mod, iris[100, 2])
 cat(vfound$found, sep = "\n")
 ```

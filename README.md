@@ -58,6 +58,8 @@ cat(vfound$found, sep = "\n")
 
 ``` r
 mod = lm(Sepal.Length ~ ., data = iris)
+mod$test_slot = iris[100, 2]
+attr(mod$test_slot, "test-attr") = iris[100, 2]
 vfound = searchObjectForValue(mod, iris[100, 2])
 cat(vfound$found, sep = "\n")
 #> mod[["model"]][["Sepal.Width"]][[55]]
@@ -74,6 +76,8 @@ cat(vfound$found, sep = "\n")
 #> mod[["model"]][["Sepal.Width"]][[131]]
 #> mod[["model"]][["Sepal.Width"]][[133]]
 #> mod[["model"]][["Sepal.Width"]][[134]]
+#> mod[["test_slot"]][[1]]
+#> attr(mod[["test_slot"]], 'test-attr')
 ```
 
 ## Disclaimer
@@ -105,9 +109,9 @@ dat_test  = iris[! idx_train, ]
 
 set.seed(31415)
 mod_without_data = rmmodeldata::cforest(Petal.Length ~ ., data = dat_train)
-#> [2021-09-08 14:13:30] Using `rmmodeldata::cforest``
+#> [2021-09-08 14:15:38] Using `rmmodeldata::cforest``
 pred_without_data = predict(mod_without_data, newdata = dat_test)
-#> [2021-09-08 14:13:32] Using `rmmodeldata::predict.cforest.nodat`
+#> [2021-09-08 14:15:40] Using `rmmodeldata::predict.cforest.nodat`
 
 str(pred_without_data)
 #>  Named num [1:36] 1.49 1.46 1.42 1.96 1.52 ...
