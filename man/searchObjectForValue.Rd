@@ -4,12 +4,14 @@
 \alias{searchObjectForValue}
 \title{Search for value in complex R objects}
 \usage{
-searchObjectForValue(obj, value)
+searchObjectForValue(obj, value, show_output = FALSE)
 }
 \arguments{
 \item{obj}{\code{\link{R object}} R object for which we search for \code{value}.}
 
 \item{value}{\code{\link{numeric(1L)|character(1L)}} Value which which for which \code{obj} is searched through.}
+
+\item{show_output}{\code{\link{logical(1L)}} Show log (default \code{show_output = FALSE}).}
 }
 \description{
 Search for value in complex R objects

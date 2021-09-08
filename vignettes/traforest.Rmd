@@ -1,0 +1,84 @@
+---
+title: "traforest"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{traforest}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Load packages
+
+```{r setup}
+library(rmmodeldata)
+library("trtf")
+library("survival")
+```
+
+## Use case
+
+The used data is directly copied from the manual page `?traforest` of `traforest`. The main purpose is to test and to show if removing the data gives equal predictions.
+
+## Used data set
+
+```{r}
+### German Breast Cancer Study Group 2 data set
+data("GBSG2", package = "TH.data")
+
+```
+```{r, echo=FALSE}
+knitr::kable(head(GBSG2))
+```
+
+## Preparation for traforest
+
+Set-up Cox model with overall treatment effect in hormonal therapy
+
+```{r}
+yvar = numeric_var("y", support = c(100, 2000), bounds = c(0, Inf))
+By = Bernstein_basis(yvar, order = 5, ui = "incre")
+m = ctm(response = By, shifting = ~ horTh, todistr = "MinExt", data = GBSG2)
+GBSG2$y = with(GBSG2, Surv(time, cens))
+
+### overall log-hazard ratio
+coef(cmod = mlt(m, data = GBSG2))["horThyes"]
+### roughly the same as
+coef(coxph(y ~ horTh, data = GBSG2))
+
+### estimate age-dependent Cox models (here ignoring all other covariates)
+ctrl = ctree_control(minsplit = 50, minbucket = 20, mincriterion = 0)
+```
+
+Train `traforest` from `trtf`:
+
+```{r}
+set.seed(290875)
+tf_cmod = trtf::traforest(m, formula = y ~ horTh | age, control = ctrl,
+                     ntree = 50, mtry = 1, trace = TRUE, data = GBSG2)
+```
+
+Train `traforest` from `rmmodeldata`:
+
+```{r}
+set.seed(290875)
+tf_cmod_wd = rmmodeldata::traforest(m, formula = y ~ horTh | age, control = ctrl,
+                     ntree = 50, mtry = 1, trace = TRUE, data = GBSG2)
+```
+
+Predict both models and compare output:
+
+```{r}
+pred_o  = predict(tf_cmod, newdata = GBSG2)
+pred_wd = predict(tf_cmod_wd, newdata = GBSG2)
+
+all.equal(pred_o, pred_wd)
+```
+
+

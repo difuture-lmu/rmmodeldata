@@ -70,9 +70,9 @@ Now we want to compare the predictions returned from the objects. Note that due 
 ```{r}
 pred_with_data = partykit::predict.cforest(mod_with_data, newdata = tsimdata)
 
-pred_without_data = predict_cforest(mod_without_data, newdata = tsimdata)
+pred_without_data = predict(mod_without_data, newdata = tsimdata)
 # same as:
-pred_without_data = rmmodeldata:::predict.cforest(mod_without_data, newdata = tsimdata)
+pred_without_data = rmmodeldata:::predict.cforest.nodata(mod_without_data, newdata = tsimdata)
 
 all.equal(pred_with_data, pred_without_data)
 ```

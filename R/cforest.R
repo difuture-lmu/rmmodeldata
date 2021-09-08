@@ -21,7 +21,7 @@ cforest <- function(
     trace = FALSE,
     ...
 ) {
-    message("[", Sys.time(), "] Using `cforest` from `rmmodeldata!`")
+    message("[", Sys.time(), "] Using `rmmodeldata::cforest``")
 
     ### get the call and the calling environment for .urp_tree
     call <- match.call(expand.dots = FALSE)
@@ -191,7 +191,7 @@ cforest <- function(
 
     ret$trafo <- trafo
     ret$predictf <- d$terms$z
-    class(ret) <- c("cforest", class(ret))
+    class(ret) <- c("cforest.nodat", class(ret))
 
     #message("[", Sys.time(), "] Precompute fdata")
     ret$fdata = lapply(ret$nodes, partykit::fitted_node, data = ret$data)
@@ -206,10 +206,10 @@ cforest <- function(
 
 
 #' @export
-predict_cforest <- function(object, newdata = NULL, type = c("response", "prob", "weights", "node"),
+predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "prob", "weights", "node"),
                             OOB = FALSE, FUN = NULL, simplify = TRUE, scale = TRUE, ...) {
 
-    message("[", Sys.time(), "] Using `predict_cforest` from `rmmodeldata!`")
+    message("[", Sys.time(), "] Using `rmmodeldata::predict.cforest.nodat`")
 
     responses <- object$fitted[["(response)"]]
     forest <- object$nodes
@@ -323,6 +323,3 @@ predict_cforest <- function(object, newdata = NULL, type = c("response", "prob",
     }
     ret
 }
-
-#' @export
-predict.cforest = predict_cforest

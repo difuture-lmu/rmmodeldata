@@ -4,7 +4,7 @@
 \alias{constructDataSkeleton}
 \title{Construct skeleton of a data set}
 \usage{
-constructDataSkeleton(dat, n = NULL, sm = 0.01)
+constructDataSkeleton(dat, n = NULL, sm = 0.01, handler = warning, ...)
 }
 \arguments{
 \item{dat}{\code{\link[=data.frame]{data.frame()}} Data set for which the skeleton is calculated}
@@ -13,6 +13,12 @@ constructDataSkeleton(dat, n = NULL, sm = 0.01)
 number of factor levels.}
 
 \item{sm}{\code{\link{numeric(1L)}} Fraction of the range used as safety margin (default \code{sm = 0.01}).}
+
+\item{handler}{\code{\link{function}} Function used as feedback if a feature cannot be
+processed. Default is \code{handler = warning} which prints a warning. The first argument of the
+handler is a string naming the feature which cannot be processed.}
+
+\item{...}{Additional arguments passed to \code{handler}.}
 }
 \value{
 Skeleton \code{data.frame}
@@ -23,4 +29,7 @@ Numerical values are uniformly drawn between \code{min(x) - sm} and \code{max(x)
 a "safety margin" to not get insights about the minimum and maximum of a feature. Categorical
 features first contains the factor levels to ensure all levels in the skeleton. The remaining
 observations are then filled by randomly sampling from the factor levels.
+}
+\examples{
+constructDataSkeleton(iris, n = 10)
 }

@@ -10,17 +10,21 @@
 #' @param n [`integer(1L)`] Number of observations of the skeleton. The default equals the maximal
 #'   number of factor levels.
 #' @param sm [`numeric(1L)`] Fraction of the range used as safety margin (default `sm = 0.01`).
+#' @param handler [`function`] Function used as feedback if a feature cannot be
+#'   processed. Default is `handler = warning` which prints a warning. The first argument of the
+#'   handler is a string naming the feature which cannot be processed.
+#' @param ... Additional arguments passed to `handler`.
 #' @return Skeleton `data.frame`
-#' @example
+#' @examples
 #' constructDataSkeleton(iris, n = 10)
-constructDataSkeleton = function(dat, n = NULL, sm = 0.01) {
+constructDataSkeleton = function(dat, n = NULL, sm = 0.01, handler = warning, ...) {
   checkmate::assertDataFrame(dat)
   checkmate::assertInteger(n, lower = 1, any.missing = FALSE, len = 1L, null.ok = TRUE)
   checkmate::assertNumeric(sm, lower = 0, any.missing = FALSE, len = 1L)
 
   nms = names(dat)
   maxfac = max(vapply(dat, function(x) {
-    if (! is.numeric(x))
+    if (is.character(x) | is.factor(x))
       return(length(unique(x)))
     else
       return(0)
@@ -33,20 +37,33 @@ constructDataSkeleton = function(dat, n = NULL, sm = 0.01) {
 
   maxfac = n
   skeleton = lapply(nms, function(nm) {
-    if (is.numeric(dat[[nm]])) {
+    not_handled = TRUE
+    # Use `==` instead of `is.numeric` because classes, such as `Surv`, returns
+    # `TRUE` for `is.numeric` but binary operations are failing.
+    if ((class(dat[[nm]]) == "numeric") || (class(dat[[nm]]) == "integer")) {
       xmin = min(dat[[nm]], na.rm = TRUE)
       xmax = max(dat[[nm]], na.rm = TRUE)
       smm  = sm * (xmax - xmin)
       out  = runif(maxfac, xmin - smm, xmax + smm)
-    } else {
+      not_handled = FALSE
+    }
+    if (is.character(dat[[nm]]) | is.factor(dat[[nm]])) {
       uvals = unique(dat[[nm]])
       add   = NULL
       if (length(uvals) < maxfac) add = sample(uvals, size = maxfac - length(uvals), TRUE)
       out = c(uvals, add)
+      not_handled = FALSE
+    }
+    if (inherits(dat[[nm]], "Surv")) {
+      out = sample(dat[[nm]], maxfac)
+      not_handled = FALSE
+    }
+    if (not_handled) {
+      msg = paste0("Was not able to process feature ", nm, "!")
+      handler(msg, ...)
     }
     return(out)
   })
   names(skeleton) = nms
   return(do.call(data.frame, skeleton))
 }
-
