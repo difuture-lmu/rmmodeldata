@@ -28,7 +28,7 @@ The functions you get by installing this package are:
   - `cforest`
   - `traforest`
 
-Using a more complex function overwrites the original one and returns the same object with a suffix `.nodata`. For example, training a model using `partykit::cforest` returns an object of class `cforest.nodata`. For this class, special predict methods are implemented and used instead of the original `partykit:::predict.cforest` method.
+Using a more complex function overwrites the original one and returns the same object with a suffix `.nodat`. For example, training a model using `partykit::cforest` returns an object of class `cforest.nodat`. For this class, special predict methods are implemented and used instead of the original `partykit:::predict.cforest` method.
 
 ## Search for values (WIP)
 
