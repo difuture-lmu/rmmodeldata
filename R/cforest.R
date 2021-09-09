@@ -21,7 +21,7 @@ cforest <- function(
     trace = FALSE,
     ...
 ) {
-    message("[", Sys.time(), "] Using `rmmodeldata::cforest``")
+    message("[", Sys.time(), "] Using `rmmodeldata::cforest`")
 
     ### get the call and the calling environment for .urp_tree
     call <- match.call(expand.dots = FALSE)
@@ -199,7 +199,9 @@ cforest <- function(
     ## Remove data from the cforest object:
     ret$data_skeleton = constructDataSkeleton(ret$data)
     ret$data = NULL
+    message("[", Sys.time(), "] Remove data `$data`")
     ret$info$model$model = NULL
+    message("[", Sys.time(), "] Remove data `$info$model$model`")
 
     return(ret)
 }

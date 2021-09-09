@@ -20,6 +20,11 @@ traforest <- function(object, parm = 1:length(coef(object)), reparm = NULL,
     ret$model <- rmdata(object)
     ret$mltargs <- mltargs
     ret$mltobj <- ret$trafo(model = TRUE, estfun = FALSE, object = TRUE)
+
+    if ("object" %in% names(ret$mltobj)) {
+      message("[", Sys.time(), "] Remove data `$mltobj$object$data`")
+      ret$mltobj$object$data = NULL
+    }
     class(ret) <- c("traforest.nodat", class(ret))
     ret
 }
@@ -96,7 +101,7 @@ predict.traforest.nodat <- function(object,  newdata, mnewdata = data.frame(1), 
     for (i in 1:ncol(ret)) {
         if (trace) setTxtProgressBar(pb, i / ncol(ret))
         w <- ret[,i]
-        thetastart <- .thetastart(mltmod$object, ret, i, updatestart, cf)
+        thetastart <- trtf:::.thetastart(mltmod$object, ret, i, updatestart, cf)
         ### try hard to estimate parameters; if may happen that parameters for
         ### a specific obs are not identified (out of range)
         umod <- try(object$trafo(subset = which(w > 0),

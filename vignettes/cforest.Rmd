@@ -62,30 +62,26 @@ set.seed(31415)
 mod_with_data = partykit::cforest(y ~ ., data = simdata)
 
 set.seed(31415)
-mod_without_data = cforest(y ~ ., data = simdata)
+mod_without_data = rmmodeldata::cforest(y ~ ., data = simdata)
 ```
 
-Now we want to compare the predictions returned from the objects. Note that due to namespace clashes when using `partykit` functionality via the namespace, we also export every predict function as non generic method with a prefix `predict_`. Hence, the save way to call the correct predict method is to use `predict_cforest`:
+Now we compare the predictions returned from the objects. Note that due to namespace clashes when using `partykit` functionality, we export the new objects with a suffix `.nodat` and use generics for this class:
 
 ```{r}
-pred_with_data = partykit::predict.cforest(mod_with_data, newdata = tsimdata)
+pred_with_data = predict(mod_with_data, newdata = tsimdata)
 
 pred_without_data = predict(mod_without_data, newdata = tsimdata)
-# same as:
-pred_without_data = rmmodeldata:::predict.cforest.nodata(mod_without_data, newdata = tsimdata)
 
 all.equal(pred_with_data, pred_without_data)
 ```
 
-Note: The generic `predict.cforest` is also exported but can be overloaded by partykit.
-
 
 ## Check if a value from the data set can be found in the model structure
 
-```{r}
-lfound_with_data = searchObjectForValue(mod_with_data, simdata[1, 1])
+```{r, warning=FALSE}
+lfound_with_data = searchObjectForValue(mod_with_data, simdata[1, 3])
 cat(lfound_with_data$found, sep = "\n")
 
-lfound_without_data = searchObjectForValue(mod_without_data, simdata[1, 1])
+lfound_without_data = searchObjectForValue(mod_without_data, simdata[1, 3])
 cat(lfound_without_data$found, sep = "\n")
 ```
