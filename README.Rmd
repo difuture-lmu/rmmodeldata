@@ -74,6 +74,7 @@ dat_test  = iris[! idx_train, ]
 
 set.seed(31415)
 mod_without_data = rmmodeldata::cforest(Petal.Length ~ ., data = dat_train)
+#mod_without_data = partykit::cforest(Petal.Length ~ ., data = dat_train)
 pred_without_data = predict(mod_without_data, newdata = dat_test)
 
 str(pred_without_data)

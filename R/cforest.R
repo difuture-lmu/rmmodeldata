@@ -196,12 +196,17 @@ cforest <- function(
     #message("[", Sys.time(), "] Precompute fdata")
     ret$fdata = lapply(ret$nodes, partykit::fitted_node, data = ret$data)
 
-    ## Remove data from the cforest object:
     ret$data_skeleton = constructDataSkeleton(ret$data)
+
+    ## Remove data from the cforest object:
     ret$data = NULL
     message("[", Sys.time(), "] Remove data `$data`")
     ret$info$model$model = NULL
     message("[", Sys.time(), "] Remove data `$info$model$model`")
+    ret$info$call$data = NULL
+    message("[", Sys.time(), "] Remove data `$info$call$data`")
+    ret$fitted = NULL
+    message("[", Sys.time(), "] Remove data `$fitted`")
 
     return(ret)
 }
@@ -213,7 +218,8 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
 
     message("[", Sys.time(), "] Using `rmmodeldata::predict.cforest.nodat`")
 
-    responses <- object$fitted[["(response)"]]
+    #responses <- object$fitted[["(response)"]]
+    responses <- object$data_skeleton[[all.vars(object$terms)[1]]]
     forest <- object$nodes
 
     if ("data_skeleton" %in% names(object))
@@ -224,9 +230,11 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
     # message("[", as.character(Sys.time()), "] Use ", cl, "")
     nd <- eval(parse(text = cl))
 
+    #browser()
+
     vmatch <- 1:ncol(nd)
-    NOnewdata <- TRUE
     if (!is.null(newdata)) {
+      NOnewdata <- TRUE
         factors <- which(sapply(nd, is.factor))
         xlev <- lapply(factors, function(x) levels(nd[[x]]))
         names(xlev) <- names(nd)[factors]
@@ -267,6 +275,8 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
         fnewdata <- lapply(forest, partykit::fitted_node, data = nd, vmatch = vmatch, ...)
     }
     w <- partykit:::.rfweights(fdata, fnewdata, rw, scale)
+
+    browser()
 
 #    for (b in 1:length(forest)) {
 #        ids <- nodeids(forest[[b]], terminal = TRUE)

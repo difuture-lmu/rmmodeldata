@@ -1,3 +1,5 @@
+devtools::install()
+
 library(MASS)
 library(dplyr)
 library(partykit)
@@ -86,10 +88,6 @@ sets <- createFolds(sim_df$trt, k = k)
                                    Surv(left, right, type = "interval2") | trt  ~ .,
                                  data = traindat, ntree = 50)
 
-  vsearch = searchObjectForValue(myforest_cox_pred_rmd, traindat[1,4])
-  vsearch$found
-
-  myforest_cox_pred_rmd$mltobj$object$data = NULL
   preds_forauc_rmd <- diag(do.call(rbind,
                        predict(myforest_cox_pred_rmd, newdata = testdat_val, mnewdata = testdat_val,
                                type = "survivor", q = 104)))
@@ -97,9 +95,97 @@ sets <- createFolds(sim_df$trt, k = k)
   cbind(preds_forauc, preds_forauc_rmd)
   all.equal(preds_forauc, preds_forauc_rmd)
 
+  # - Modify outcome in predict (respone ind data skeleton)
+  # - Summarize what we have done so far and summarize possible issues (e.g. data in environments etc.)
+  # - Write Prof. Hothorn.
 
-#### REST OF THE CODE COMES HERE
-#### WAS DELETED TO KEEP THE FILE AS SHORT AND SIMPLE AS POSSIBLE
 
+  ### CHECK FOR DATA IN THE MODELS:
+  ### ===========================================================
+
+  ## Flatten model
+  ## -------------------------------------------------------
+
+  #mod_flatten = unlist(myforest_cox_pred_rmd)
+  mod_flatten = unlist(myforest_cox_pred)
+  counter  = 1
+  patience = 10
+  pat0     = 0
+  while (any(! (sapply(mod_flatten, class) %in% c("list", "integer", "numeric", "logical", "data.frame", "environment", "function")))) {
+    lmod_old = length(mod_flatten)
+    mod_flatten = lapply(mod_flatten, function(x) {
+      # message(class(x))
+      if (! inherits(x, c("environment", "function"))) {
+        class(x) = "list"
+        for (i in seq_along(x)) {
+          if (! inherits(x[[i]], c("environment", "function"))) class(x[[i]]) = "list"
+        }
+      }
+      return(unlist(x))
+    })
+    mod_flatten = unlist(mod_flatten)
+    lmod_new    = length(mod_flatten)
+
+    if (lmod_old == lmod_new) pat0 = pat0 + 1 else pat0 = 0
+    if (pat0 == patience + 1) break
+    message("Iter ", counter, "; Patience = ", pat0)
+    counter = counter + 1
+  }
+
+  ## Inspect classes:
+  ## -------------------------------------------------------
+
+  classes    = sapply(mod_flatten, class)
+  classes_ul = unlist(classes)
+  table(classes_ul)
+
+  ## Suspicious elements:
+  tmp = mod_flatten[sapply(classes, length) > 1]
+  length(tmp)
+  table(sapply(tmp, class))
+
+  mod_flatten[sapply(classes, length) > 1]
+
+  ## Check if element contains a specific number:
+  ## -------------------------------------------------------
+  number = traindat[1, 4]
+
+  contains_number = lapply(mod_flatten, function(x) {
+    names(x)
+    e = try({ any(x == number) }, silent = TRUE)
+
+    if (inherits(e, "try-error")) return("Failure")
+    if (is.na(e)) return("Comparison gives NA")
+    if (length(e) == 0) return("Comparison is empty")
+    if (e) return("Found value") else return("No value found")
+  })
+
+  table(unlist(contains_number))
+  names(contains_number)[grepl("Found", unlist(contains_number))]
+  names(contains_number)[grepl("NA", unlist(contains_number))]
+  names(contains_number)[grepl("empty", unlist(contains_number))]
+
+
+  ## Compare both objects:
+  ## -------------------------------------------------------
+
+  mod_fl     = flattenObject(myforest_cox_pred)
+  mod_fl_rmd = flattenObject(myforest_cox_pred_rmd)
+
+  number = traindat[1, 10]
+
+  cnb     = findNumber(mod_fl, number)
+  cnb_rmd = findNumber(mod_fl_rmd, number)
+
+  table(unlist(cnb))
+  table(unlist(cnb_rmd))
+
+  names(cnb)[grepl("Found", unlist(cnb))]
+  names(cnb)[grepl("NA", unlist(cnb))]
+  names(cnb)[grepl("empty", unlist(cnb))]
+
+
+  #vsearch = searchObjectForValue(myforest_cox_pred_rmd, traindat[1,4])
+  #vsearch$found
 
 

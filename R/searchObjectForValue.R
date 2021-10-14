@@ -104,3 +104,57 @@ searchObjectForValue = function(obj, value, show_output = FALSE) {
   }
   return(list(found = out, failures = failures))
 }
+
+#' Flatten R object
+#'
+#' @param obj [`R object`] R object which should be flatten.
+#' @param patience [`integer(1L)`] How many iterations needs the length of the old and new flatten object to be equal to stop the algorithm?
+#' @return [`list`] containing the flatten object.
+#' @examples
+#' obj = lm(Petal.Length ~ ., data = iris)
+#' obj_flatten = flattenObject(obj)
+#' @export
+flattenObject = function(obj, patience = 10L) {
+  mod_flatten = unlist(obj)
+  counter  = 1
+  pat0     = 0
+  while (any(! (sapply(mod_flatten, class) %in% c("list", "integer", "numeric", "logical", "data.frame", "environment", "function")))) {
+    lmod_old = length(mod_flatten)
+    mod_flatten = lapply(mod_flatten, function(x) {
+      # message(class(x))
+      if (! inherits(x, c("environment", "function"))) {
+        class(x) = "list"
+        for (i in seq_along(x)) {
+          if (! inherits(x[[i]], c("environment", "function"))) class(x[[i]]) = "list"
+        }
+      }
+      return(unlist(x))
+    })
+    mod_flatten = unlist(mod_flatten)
+    lmod_new    = length(mod_flatten)
+
+    if (lmod_old == lmod_new) pat0 = pat0 + 1 else pat0 = 0
+    if (pat0 == patience + 1) break
+    message("Iter ", counter, "; Patience = ", pat0)
+    counter = counter + 1
+  }
+  return(mod_flatten)
+}
+
+#' Find number in R object
+#' @param obj [`R object`] R object which should be flatten.
+#' @param number [`anything`] Value which which for which `obj` is searched through.
+#' @return [`list`] Containing messages whether the object was found or not.
+#' @export
+findNumber = function(obj, number) {
+  contains_number = lapply(obj, function(x) {
+    names(x)
+    e = try({ any(x == number) }, silent = TRUE)
+
+    if (inherits(e, "try-error")) return("Failure")
+    if (is.na(e)) return("Comparison gives NA")
+    if (length(e) == 0) return("Comparison is empty")
+    if (e) return("Found value") else return("No value found")
+  })
+  return(contains_number)
+}
