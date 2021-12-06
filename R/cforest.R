@@ -230,8 +230,6 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
     # message("[", as.character(Sys.time()), "] Use ", cl, "")
     nd <- eval(parse(text = cl))
 
-    #browser()
-
     vmatch <- 1:ncol(nd)
     if (!is.null(newdata)) {
       NOnewdata <- TRUE
@@ -266,7 +264,6 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
     if (!is.null(object$info))
         applyfun <- object$info$control$applyfun
 
-    #if (!is.null(object$browse)) browser()
     fdata = object$fdata
     #fdata <- lapply(forest, fitted_node, data = object$data, ...)
     if (NOnewdata && OOB) {
@@ -275,8 +272,6 @@ predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "
         fnewdata <- lapply(forest, partykit::fitted_node, data = nd, vmatch = vmatch, ...)
     }
     w <- partykit:::.rfweights(fdata, fnewdata, rw, scale)
-
-    browser()
 
 #    for (b in 1:length(forest)) {
 #        ids <- nodeids(forest[[b]], terminal = TRUE)
