@@ -1,6 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![R-CMD-check](https://github.com/difuture-lmu/rmmodeldata/actions/workflows/check-full.yaml/badge.svg)](https://github.com/difuture-lmu/rmmodeldata/actions/workflows/check-full.yaml)
+[![License: LGPL
+v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+
 # rmmodeldata: Remove data from models
 
 ## Overview
