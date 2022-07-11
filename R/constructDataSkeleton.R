@@ -16,10 +16,11 @@
 #' @param ... Additional arguments passed to `handler`.
 #' @return Skeleton `data.frame`
 #' @examples
-#' constructDataSkeleton(iris, n = 10)
+#' constructDataSkeleton(iris, n = 10L)
+#' @export
 constructDataSkeleton = function(dat, n = NULL, sm = 0.01, handler = warning, ...) {
   checkmate::assertDataFrame(dat)
-  checkmate::assertInteger(n, lower = 1, any.missing = FALSE, len = 1L, null.ok = TRUE)
+  checkmate::assertIntegerish(n, lower = 1, any.missing = FALSE, len = 1L, null.ok = TRUE)
   checkmate::assertNumeric(sm, lower = 0, any.missing = FALSE, len = 1L)
 
   nms = names(dat)

@@ -10,6 +10,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  eval = FALSE,
   comment = "#>"
 )
 ```
@@ -69,7 +70,6 @@ Now we compare the predictions returned from the objects. Note that due to names
 
 ```{r}
 pred_with_data = predict(mod_with_data, newdata = tsimdata)
-
 pred_without_data = predict(mod_without_data, newdata = tsimdata)
 
 all.equal(pred_with_data, pred_without_data)

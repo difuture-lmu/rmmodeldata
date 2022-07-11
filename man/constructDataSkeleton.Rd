@@ -31,5 +31,5 @@ features first contains the factor levels to ensure all levels in the skeleton. 
 observations are then filled by randomly sampling from the factor levels.
 }
 \examples{
-constructDataSkeleton(iris, n = 10)
+constructDataSkeleton(iris, n = 10L)
 }

@@ -3,6 +3,7 @@
 S3method(predict,cforest.nodat)
 S3method(predict,traforest.nodat)
 export(cforest)
+export(constructDataSkeleton)
 export(deparseLayer)
 export(deparseStructure)
 export(findNumber)

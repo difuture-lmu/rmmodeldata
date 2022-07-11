@@ -11,8 +11,11 @@ knitr::opts_chunk$set(
   fig.path = "Readme_files/"
 )
 
+# remotes::install_github("difuture-lmu/rmmodeldata", ref = "main")
 library(rmmodeldata)
 ```
+
+
 
 # rmmodeldata: Remove data from models
 
@@ -34,20 +37,6 @@ Using a more complex function overwrites the original one and returns the same o
 
 In order to detect data in an `R` object, `rmmodeldata` provides a function `searchObjectForValue` which searches through an object for a specific value.
 
-__Examples:__
-
-```{r}
-vfound = searchObjectForValue(iris, iris[100, 2])
-cat(vfound$found, sep = "\n")
-```
-
-```{r}
-mod = lm(Sepal.Length ~ ., data = iris)
-mod$test_slot = iris[100, 2]
-attr(mod$test_slot, "test-attr") = iris[100, 2]
-vfound = searchObjectForValue(mod, iris[100, 2])
-cat(vfound$found, sep = "\n")
-```
 
 ## Disclaimer
 
@@ -63,19 +52,3 @@ cat(vfound$found, sep = "\n")
 remotes::install_github("difuture-lmu/rmmodeldata")
 ```
 
-## Example
-
-```{r}
-set.seed(31415)
-idx_train = sample(x = c(TRUE, FALSE), size = nrow(iris), replace = TRUE, prob = c(0.8, 0.2))
-
-dat_train = iris[idx_train, ]
-dat_test  = iris[! idx_train, ]
-
-set.seed(31415)
-mod_without_data = rmmodeldata::cforest(Petal.Length ~ ., data = dat_train)
-#mod_without_data = partykit::cforest(Petal.Length ~ ., data = dat_train)
-pred_without_data = predict(mod_without_data, newdata = dat_test)
-
-str(pred_without_data)
-```
