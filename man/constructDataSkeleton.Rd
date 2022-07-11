@@ -7,25 +7,25 @@
 constructDataSkeleton(dat, n = NULL, sm = 0.01, handler = warning, ...)
 }
 \arguments{
-\item{dat}{\code{\link[=data.frame]{data.frame()}} Data set for which the skeleton is calculated}
+\item{dat}{[`data.frame()`] Data set for which the skeleton is calculated}
 
-\item{n}{\code{\link{integer(1L)}} Number of observations of the skeleton. The default equals the maximal
+\item{n}{[`integer(1L)`] Number of observations of the skeleton. The default equals the maximal
 number of factor levels.}
 
-\item{sm}{\code{\link{numeric(1L)}} Fraction of the range used as safety margin (default \code{sm = 0.01}).}
+\item{sm}{[`numeric(1L)`] Fraction of the range used as safety margin (default `sm = 0.01`).}
 
-\item{handler}{\code{\link{function}} Function used as feedback if a feature cannot be
-processed. Default is \code{handler = warning} which prints a warning. The first argument of the
+\item{handler}{[`function`] Function used as feedback if a feature cannot be
+processed. Default is `handler = warning` which prints a warning. The first argument of the
 handler is a string naming the feature which cannot be processed.}
 
-\item{...}{Additional arguments passed to \code{handler}.}
+\item{...}{Additional arguments passed to `handler`.}
 }
 \value{
-Skeleton \code{data.frame}
+Skeleton `data.frame`
 }
 \description{
 Representing the structure of a data set without including any observation of the data frame.
-Numerical values are uniformly drawn between \code{min(x) - sm} and \code{max(x) + sm} where \code{sm} is
+Numerical values are uniformly drawn between `min(x) - sm` and `max(x) + sm` where `sm` is
 a "safety margin" to not get insights about the minimum and maximum of a feature. Categorical
 features first contains the factor levels to ensure all levels in the skeleton. The remaining
 observations are then filled by randomly sampling from the factor levels.

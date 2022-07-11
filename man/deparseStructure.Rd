@@ -7,9 +7,9 @@
 deparseStructure(obj, terminator = isFinalLayer)
 }
 \arguments{
-\item{obj}{\code{\link{R object}} R object which is deparsed.}
+\item{obj}{[`R object`] R object which is deparsed.}
 
-\item{terminator}{\code{\link{function}} Function to check if a final layer is reached (default \code{terminator = isFinalLayer}).}
+\item{terminator}{[`function`] Function to check if a final layer is reached (default `terminator = isFinalLayer`).}
 }
 \description{
 Deparse the whole structure of an R object

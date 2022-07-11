@@ -7,7 +7,7 @@
 deparseLayer(obj)
 }
 \arguments{
-\item{obj}{\code{\link{R object}} R object which is deparsed.}
+\item{obj}{[`R object`] R object which is deparsed.}
 }
 \description{
 Get the first level structure of an R object

@@ -1,3 +1,23 @@
+#' @title Conditional Random Forests
+#' See \code{?partykit::cforest}.
+#' @param formula (see \code{?partykit::cforest})
+#' @param data (see \code{?partykit::cforest})
+#' @param weights (see \code{?partykit::cforest})
+#' @param subset (see \code{?partykit::cforest})
+#' @param offset (see \code{?partykit::cforest})
+#' @param cluster (see \code{?partykit::cforest})
+#' @param strata (see \code{?partykit::cforest})
+#' @param na.action (see \code{?partykit::cforest})
+#' @param control (see \code{?partykit::cforest})
+#' @param ytrafo (see \code{?partykit::cforest})
+#' @param scores (see \code{?partykit::cforest})
+#' @param ntree (see \code{?partykit::cforest})
+#' @param perturb (see \code{?partykit::cforest})
+#' @param mtry (see \code{?partykit::cforest})
+#' @param applyfun (see \code{?partykit::cforest})
+#' @param cores (see \code{?partykit::cforest})
+#' @param trace (see \code{?partykit::cforest})
+#' @param ... (see \code{?partykit::cforest})
 #' @export
 cforest <- function(
     formula,
@@ -211,7 +231,16 @@ cforest <- function(
     return(ret)
 }
 
-
+#' @title Conditional Random Forests
+#' See \code{?partykit::cforest}.
+#' @param object (see \code{?partykit::predict.cforest})
+#' @param newdata (see \code{?partykit::predict.cforest})
+#' @param type (see \code{?partykit::predict.cforest})
+#' @param OOB (see \code{?partykit::predict.cforest})
+#' @param FUN (see \code{?partykit::predict.cforest})
+#' @param simplify (see \code{?partykit::predict.cforest})
+#' @param scale (see \code{?partykit::predict.cforest})
+#' @param ... (see \code{?partykit::predict.cforest})
 #' @export
 predict.cforest.nodat <- function(object, newdata = NULL, type = c("response", "prob", "weights", "node"),
                             OOB = FALSE, FUN = NULL, simplify = TRUE, scale = TRUE, ...) {

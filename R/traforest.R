@@ -1,3 +1,12 @@
+#' @title Transformation Forests
+#' See \code{?trtf::traforest}.
+#' @param object (see \code{?trtf::traforest})
+#' @param parm (see \code{?trtf::traforest})
+#' @param reparm (see \code{?trtf::traforest})
+#' @param update (see \code{?trtf::traforest})
+#' @param min_update (see \code{?trtf::traforest})
+#' @param mltargs (see \code{?trtf::traforest})
+#' @param ... (see \code{?trtf::traforest})
 #' @export
 traforest <- function(object, parm = 1:length(coef(object)), reparm = NULL,
                       update = TRUE, min_update = length(coef(object)) * 2,
@@ -29,6 +38,21 @@ traforest <- function(object, parm = 1:length(coef(object)), reparm = NULL,
     ret
 }
 
+#' @title Transformation Forests
+#' See \code{?trtf::predict.traforest}.
+#' @param object (see \code{?trtf::predict.traforest})
+#' @param newdata (see \code{?trtf::predict.traforest})
+#' @param mnewdata (see \code{?trtf::predict.traforest})
+#' @param K (see \code{?trtf::predict.traforest})
+#' @param q (see \code{?trtf::predict.traforest})
+#' @param type (see \code{?trtf::predict.traforest})
+#' @param OOB (see \code{?trtf::predict.traforest})
+#' @param simplify (see \code{?trtf::predict.traforest})
+#' @param trace (see \code{?trtf::predict.traforest})
+#' @param updatestart (see \code{?trtf::predict.traforest})
+#' @param applyfun (see \code{?trtf::predict.traforest})
+#' @param cores (see \code{?trtf::predict.traforest})
+#' @param ... (see \code{?trtf::predict.traforest})
 #' @export
 predict.traforest.nodat <- function(object,  newdata, mnewdata = data.frame(1), K = 20, q = NULL,
     type = c("weights", "node", "coef", "trafo", "distribution", "survivor", "density",

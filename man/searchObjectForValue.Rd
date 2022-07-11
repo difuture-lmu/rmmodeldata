@@ -7,11 +7,11 @@
 searchObjectForValue(obj, value, show_output = FALSE)
 }
 \arguments{
-\item{obj}{\code{\link{R object}} R object for which we search for \code{value}.}
+\item{obj}{[`R object`] R object for which we search for `value`.}
 
-\item{value}{\code{\link{numeric(1L)|character(1L)}} Value which which for which \code{obj} is searched through.}
+\item{value}{[`numeric(1L)|character(1L)`] Value which which for which `obj` is searched through.}
 
-\item{show_output}{\code{\link{logical(1L)}} Show log (default \code{show_output = FALSE}).}
+\item{show_output}{[`logical(1L)`] Show log (default `show_output = FALSE`).}
 }
 \description{
 Search for value in complex R objects

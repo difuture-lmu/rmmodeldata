@@ -7,12 +7,12 @@
 flattenObject(obj, patience = 10L)
 }
 \arguments{
-\item{obj}{\code{\link{R object}} R object which should be flatten.}
+\item{obj}{[`R object`] R object which should be flatten.}
 
-\item{patience}{\code{\link{integer(1L)}} How many iterations needs the length of the old and new flatten object to be equal to stop the algorithm?}
+\item{patience}{[`integer(1L)`] How many iterations needs the length of the old and new flatten object to be equal to stop the algorithm?}
 }
 \value{
-\code{\link{list}} containing the flatten object.
+[`list`] containing the flatten object.
 }
 \description{
 Flatten R object

@@ -7,12 +7,12 @@
 findNumber(obj, number)
 }
 \arguments{
-\item{obj}{\code{\link{R object}} R object which should be flatten.}
+\item{obj}{[`R object`] R object which should be flatten.}
 
-\item{number}{\code{\link{anything}} Value which which for which \code{obj} is searched through.}
+\item{number}{[`anything`] Value which which for which `obj` is searched through.}
 }
 \value{
-\code{\link{list}} Containing messages whether the object was found or not.
+[`list`] Containing messages whether the object was found or not.
 }
 \description{
 Find number in R object

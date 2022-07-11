@@ -7,7 +7,7 @@
 isFinalLayer(layer)
 }
 \arguments{
-\item{layer}{\code{\link{character(1L)}}}
+\item{layer}{[`character(1L)`]}
 }
 \description{
 Check if a layer is the last one in the object structure
